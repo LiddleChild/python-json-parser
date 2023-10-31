@@ -9,14 +9,14 @@ class Token(Enum):
   COLON,         \
   COMMA,         \
   STRING_LITERAL,\
-  INT_LITERAL,   \
+  NUMBER_LITERAL,   \
   EOF,           \
   = range(9)
 
 class Tokenizer:
   def match_token(self):
     return [
-      (lambda curr, nxt,: curr.isspace(), None),
+      (lambda curr, nxt: curr.isspace(), None),
       (lambda curr, nxt: curr == "\n", None),
       (lambda curr, nxt: curr == "\t", None),
       (lambda curr, nxt: curr == "{",  Token.OPEN_BRACES),
@@ -26,7 +26,7 @@ class Tokenizer:
       (lambda curr, nxt: curr == ":",  Token.COLON),
       (lambda curr, nxt: curr == ",",  Token.COMMA),
       (lambda curr, nxt: re.match(r"""\"([^"\\]|\\[\s\S])*\"""", curr) != None, Token.STRING_LITERAL),
-      (lambda curr, nxt: curr.isnumeric() and not nxt.isnumeric(),              Token.INT_LITERAL),
+      (lambda curr, nxt: re.match(r"""[+-]?([0-9]*[.])?[0-9]+""", curr) != None and not nxt.isnumeric() and not nxt == ".", Token.NUMBER_LITERAL),
     ]
   
   def tokenize(self, json_str):

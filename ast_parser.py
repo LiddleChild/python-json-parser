@@ -73,8 +73,8 @@ class AST:
     if self.top() == Token.STRING_LITERAL:
       return self.parse_string_literal()
 
-    if self.top() == Token.INT_LITERAL:
-      return self.parse_integer_literal()
+    if self.top() == Token.NUMBER_LITERAL:
+      return self.parse_number_literal()
 
     if self.top() == Token.OPEN_BRACES and not array:
       return self.parse_body()
@@ -91,9 +91,9 @@ class AST:
     key = self.consume(Token.STRING_LITERAL)
     return key[1:-1]
   
-  def parse_integer_literal(self):
-    key = self.consume(Token.INT_LITERAL)
-    return int(key)
+  def parse_number_literal(self):
+    key = float(self.consume(Token.NUMBER_LITERAL))
+    return int(key) if key == round(key, 0) else key
 
   """
   generate
