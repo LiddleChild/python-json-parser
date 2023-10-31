@@ -11,6 +11,7 @@ class Token(str, Enum):
   COMMA          = ",",
   STRING_LITERAL = "String",
   NUMBER_LITERAL = "Number",
+  BOOLEAN_LITERAL= "Boolean",
   EOF            = None
 
 class Tokenizer:
@@ -25,6 +26,7 @@ class Tokenizer:
       (lambda curr, nxt: curr == "]",  Token.CLOSE_BRACKET),
       (lambda curr, nxt: curr == ":",  Token.COLON),
       (lambda curr, nxt: curr == ",",  Token.COMMA),
+      (lambda curr, nxt: curr in ["true", "false"], Token.BOOLEAN_LITERAL),
       (lambda curr, nxt: re.match(r"""\"([^"\\]|\\[\s\S])*\"""", curr) != None, Token.STRING_LITERAL),
       (lambda curr, nxt: re.match(r"""[+-]?([0-9]*[.])?[0-9]+""", curr) != None and not nxt.isnumeric() and not nxt == ".", Token.NUMBER_LITERAL),
     ]

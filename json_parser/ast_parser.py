@@ -75,6 +75,9 @@ class AST:
 
     if self.top() == Token.NUMBER_LITERAL:
       return self.parse_number_literal()
+    
+    if self.top() == Token.BOOLEAN_LITERAL:
+      return self.parse_boolean_literal()
 
     if self.top() == Token.OPEN_BRACES:
       return self.parse_body()
@@ -89,13 +92,16 @@ class AST:
   literal parser
   """
   def parse_string_literal(self):
-    key = self.consume(Token.STRING_LITERAL)
-    return key[1:-1]
+    val = self.consume(Token.STRING_LITERAL)
+    return val[1:-1]
   
   def parse_number_literal(self):
-    key = float(self.consume(Token.NUMBER_LITERAL))
-    return int(key) if key == round(key, 0) else key
-
+    val = float(self.consume(Token.NUMBER_LITERAL))
+    return int(val) if val == round(val, 0) else val
+  
+  def parse_boolean_literal(self):
+    val = self.consume(Token.BOOLEAN_LITERAL)
+    return val == "true"
   """
   generate
   """
