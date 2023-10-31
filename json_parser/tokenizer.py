@@ -38,8 +38,6 @@ class Tokenizer:
       buffer += json_str[i]      
       nxt = json_str[i + 1] if i + 1 < len(json_str) else None
 
-      # print(f"<{buffer}>")
-
       for func, val in self.match_token():
         if func(buffer, nxt) and val == None:
           buffer = ""

@@ -1,4 +1,4 @@
-from tokenizer import Token
+from json_parser.tokenizer import Token
 
 class AST:
   """
