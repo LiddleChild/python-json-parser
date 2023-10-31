@@ -58,7 +58,7 @@ class AST:
     arr = []
 
     while self.top() != Token.CLOSE_BRACKET:
-      value = self.parse_value(array=True)
+      value = self.parse_value()
       self.consume(Token.COMMA, self.top() == Token.CLOSE_BRACKET)
       arr.append(value)
 
@@ -69,20 +69,21 @@ class AST:
   """
   parse value
   """
-  def parse_value(self, array=False):
+  def parse_value(self):
     if self.top() == Token.STRING_LITERAL:
       return self.parse_string_literal()
 
     if self.top() == Token.NUMBER_LITERAL:
       return self.parse_number_literal()
 
-    if self.top() == Token.OPEN_BRACES and not array:
+    if self.top() == Token.OPEN_BRACES:
       return self.parse_body()
   
     if self.top() == Token.OPEN_BRACKET:
       return self.parse_array()
     
-    raise Exception("Unexcepted value")
+    token, content = self.token_stream[self.index]
+    raise Exception(f"Parsing failed at index {self.index}: '{content}'")
   
   """
   literal parser
