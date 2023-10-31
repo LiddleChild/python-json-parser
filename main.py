@@ -1,11 +1,26 @@
 from tokenizer import Tokenizer
+from ast_parser import AST
 
 json_str = """
 {
-  "first1": 111,
-  "second2": 222,
+  "integer1": 987654,
+  "string1": "hello, world",
+  "body1": {
+    "integer2": 645321,
+    "string2": "hi!"
+  },
+  "body2": {
+    "array1": [1, "2", "3", 4],
+    "array2": []
+  }
 }
 """
 tokenizer = Tokenizer()
-for i in tokenizer.tokenize(json_str):
-  print(i)
+token_stream = tokenizer.tokenize(json_str)
+# for i in token_stream:
+#   print(i)
+
+ast = AST()
+json = ast.generate(token_stream)
+
+print(json)

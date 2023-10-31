@@ -10,7 +10,8 @@ class Token(Enum):
   COMMA,         \
   STRING_LITERAL,\
   INT_LITERAL,   \
-  = range(8)
+  EOF,           \
+  = range(9)
 
 class Tokenizer:
   def match_token(self):
@@ -50,5 +51,7 @@ class Tokenizer:
           break
 
       i += 1
+
+    token_stream.append((Token.EOF, None))
 
     return token_stream
