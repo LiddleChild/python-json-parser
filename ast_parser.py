@@ -1,6 +1,9 @@
 from tokenizer import Token
 
 class AST:
+  """
+  utility function
+  """
   def consume(self, expected_token, optional=False):
     token, content = self.token_stream[self.index]
     
@@ -23,12 +26,18 @@ class AST:
     else:
       return None
 
+  """
+  parse json
+  """
   def parse_json(self):
     ast = self.parse_body()
     self.consume(Token.EOF)
 
     return ast
 
+  """
+  parse with body
+  """
   def parse_body(self):
     self.consume(Token.OPEN_BRACES)
     ast = dict()
@@ -44,6 +53,22 @@ class AST:
 
     return ast
   
+  def parse_array(self):
+    self.consume(Token.OPEN_BRACKET)
+    arr = []
+
+    while self.top() != Token.CLOSE_BRACKET:
+      value = self.parse_value(array=True)
+      self.consume(Token.COMMA, self.top() == Token.CLOSE_BRACKET)
+      arr.append(value)
+
+    self.consume(Token.CLOSE_BRACKET)
+
+    return arr
+  
+  """
+  parse value
+  """
   def parse_value(self, array=False):
     if self.top() == Token.STRING_LITERAL:
       return self.parse_string_literal()
@@ -58,7 +83,10 @@ class AST:
       return self.parse_array()
     
     raise Exception("Unexcepted value")
-    
+  
+  """
+  literal parser
+  """
   def parse_string_literal(self):
     key = self.consume(Token.STRING_LITERAL)
     return key[1:-1]
@@ -66,20 +94,10 @@ class AST:
   def parse_integer_literal(self):
     key = self.consume(Token.INT_LITERAL)
     return int(key)
-  
-  def parse_array(self):
-    self.consume(Token.OPEN_BRACKET)
-    arr = []
 
-    while self.top() != Token.CLOSE_BRACKET:
-      value = self.parse_value(array=True)
-      self.consume(Token.COMMA, self.top() == Token.CLOSE_BRACKET)
-      arr.append(value)
-
-    self.consume(Token.CLOSE_BRACKET)
-
-    return arr
-
+  """
+  generate
+  """
   def generate(self, token_stream):
     self.token_stream = token_stream
     self.index = 0
