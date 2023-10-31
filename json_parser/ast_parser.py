@@ -9,7 +9,7 @@ class AST:
     
     if token != expected_token:
       if not optional:
-        raise Exception(f"Parsing failed at index {self.index}: '{content}' expected: {expected_token}")
+        raise Exception(f"Parsing failed at character: '{content}' expected: '{expected_token.value}'")
       else:
         return None
     
@@ -82,8 +82,8 @@ class AST:
     if self.top() == Token.OPEN_BRACKET:
       return self.parse_array()
     
-    token, content = self.token_stream[self.index]
-    raise Exception(f"Parsing failed at index {self.index}: '{content}'")
+    _, content = self.token_stream[self.index]
+    raise Exception(f"Parsing failed at character: '{content}' expected value after ':'")
   
   """
   literal parser

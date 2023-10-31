@@ -1,17 +1,17 @@
 from enum import Enum
 import re
+import sys
 
-class Token(Enum):
-  OPEN_BRACES,   \
-  CLOSE_BRACES,  \
-  OPEN_BRACKET,  \
-  CLOSE_BRACKET, \
-  COLON,         \
-  COMMA,         \
-  STRING_LITERAL,\
-  NUMBER_LITERAL,   \
-  EOF,           \
-  = range(9)
+class Token(str, Enum):
+  OPEN_BRACES    = "{",
+  CLOSE_BRACES   = "}",
+  OPEN_BRACKET   = "[",
+  CLOSE_BRACKET  = "]",
+  COLON          = ":",
+  COMMA          = ",",
+  STRING_LITERAL = "String",
+  NUMBER_LITERAL = "Number",
+  EOF            = None
 
 class Tokenizer:
   def match_token(self):
@@ -49,6 +49,9 @@ class Tokenizer:
           break
 
       i += 1
+
+    if buffer != "":
+      raise Exception(f"Unexpected character: '{token_stream[-1][1]}'")
 
     token_stream.append((Token.EOF, None))
 
